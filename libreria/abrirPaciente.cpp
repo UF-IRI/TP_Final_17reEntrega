@@ -1,7 +1,7 @@
 #include "funciones.h"
 
 bool abrirPaciente(string path, Paciente *&array, int &N, int cantidad_aumentar){
-    if( array == nullptr){
+    if(array == nullptr){
         return false;
     }
 

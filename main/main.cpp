@@ -12,13 +12,11 @@ using namespace std;
 
 int main() {
 
-    //fstream cons,cont,med
-    //string dummy;
-    //string coma;
     int N=20;
     int i = 0;
     int cantidad_aumentar = 5;
 
+    //pacientes
     Paciente *array = new Paciente[N];
     string pathPac = "Pacientes.csv";
 
@@ -27,6 +25,7 @@ int main() {
         cout<<"no se pudo abrir y crear la lista";
     }
 
+    //contactos
     Contacto *ArrContacto = new Contacto[N];
     string pathCont = "Contactos.csv";
 
@@ -34,6 +33,26 @@ int main() {
     if(!(check)){
         cout<<"no se pudo abrir y crear la lista";
     }
+
+    //consultas
+    Consultas *ArrConsultas = new Consultas[N];
+    string pathCons = "Consultas.csv";
+
+    check = abrirConsultas(pathCons, ArrConsultas, N, cantidad_aumentar);
+    if(!(check)){
+        cout<<"no se pudo abrir y crear la lista";
+    }
+
+    //medicos
+    Medico *ArrMed = new Medico[N];
+    string pathMed = "Medicos.csv";
+
+    check = abrirMedico(pathMed, ArrMed, N, cantidad_aumentar);
+    if(!(check)){
+        cout<<"no se pudo abrir y crear la lista";
+    }
+
+
 
 
 

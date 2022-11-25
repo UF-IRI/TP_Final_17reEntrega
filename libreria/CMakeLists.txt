@@ -1,6 +1,6 @@
 ## >>>>>>>>>>>>>>>
 ## >>>>>>>>>>>>>>>
-add_library(libreria dummy.cpp structs.h funciones.h abrirPaciente.cpp resizePac.cpp abrirContacto.cpp resizeCont.cpp)
+add_library(libreria dummy.cpp structs.h funciones.h abrirPaciente.cpp resizePac.cpp abrirContacto.cpp resizeCont.cpp abrirConsultas.cpp resizeCons.cpp resizeMed.cpp)
 ## <<<<<<<<<<<<<<<
 ## <<<<<<<<<<<<<<<
 
