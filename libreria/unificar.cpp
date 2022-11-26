@@ -17,21 +17,4 @@ void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas
         }
     }
 
-    double max = 0;
-
-    for (i=0 ;i<N ;i++){ //recorre pacientes
-        for(j=0; j<N ;j++){ //recorre las otras listas
-               
-                if(array[i].DNI == ArrConsultas[j].DNI){
-                    //copiarPacCons(array, i, ArrConsultas, j, max);
-                    array[i].TieneCons = true;
-                }
-                
-               if(array[i].DNI == ArrContacto[j].DNI){
-               // array[i].contacto.telefono = ArrContacto[j].telefono;   
-                    array[i].TieneCont = true;
-                }
-        }
-    }
-
 }
