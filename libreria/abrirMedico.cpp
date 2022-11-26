@@ -39,4 +39,3 @@ bool abrirMedico(string path, Medico *&ArrMed, int &N, int cantidad_aumentar){
     return true;
 
 }
-}

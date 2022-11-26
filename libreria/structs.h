@@ -19,6 +19,7 @@ typedef struct {
     tm fecha_turno;
     bool presento;
     Medico medico; //conectado a traves de matricula 
+    bool TieneMed;
 } Consultas;
 
 typedef struct{
@@ -40,6 +41,8 @@ typedef struct {
     Contacto contacto;
     Consultas UltimaConsulta; 
     string archivado;
+    bool TieneCons;
+    bool TieneCont;
 } Paciente;
 
 #endif

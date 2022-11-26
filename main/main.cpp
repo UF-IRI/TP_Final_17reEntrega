@@ -9,10 +9,11 @@
 
 using namespace std;
 
+//borrar mem flags
 
 int main() {
 
-    int N=20;
+    int N = 20;
     int i = 0;
     int cantidad_aumentar = 5;
 
@@ -49,12 +50,23 @@ int main() {
 
     check = abrirMedico(pathMed, ArrMed, N, cantidad_aumentar);
     if(!(check)){
-        cout<<"no se pudo abrir y crear la lista";
+         cout<<"no se pudo abrir y crear la lista";
     }
+    
+    unificar(array, ArrContacto, ArrConsultas, ArrMed, N);
 
 
 
+    delete[] ArrContacto;
+    ArrContacto = NULL;
 
+    delete[] ArrConsultas;
+    ArrConsultas = NULL;
+
+    delete[] ArrMed;
+    ArrMed = NULL;
+
+    
 
     return EXIT_SUCCESS;
 }
