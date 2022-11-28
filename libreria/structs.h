@@ -43,6 +43,7 @@ typedef struct {
     string archivado;
     bool TieneCons;
     bool TieneCont;
+    bool TieneMed_enPac;
 } Paciente;
 
 #endif

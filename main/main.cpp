@@ -53,8 +53,7 @@ int main() {
          cout<<"no se pudo abrir y crear la lista";
     }
     
-    unificar(array, ArrContacto, ArrConsultas, ArrMed, N);
-
+    //unificar(array, ArrContacto, ArrConsultas, ArrMed, N); //falta terminar
 
 
     delete[] ArrContacto;
@@ -66,7 +65,17 @@ int main() {
     delete[] ArrMed;
     ArrMed = NULL;
 
-    
+
+
+    check = creoListas(array, N);
+    if(!(check)){
+        cout<<"no se pudo crear las listas de salida";
+    }
+
+
+    delete[] array;
+    array = NULL;
+
 
     return EXIT_SUCCESS;
 }

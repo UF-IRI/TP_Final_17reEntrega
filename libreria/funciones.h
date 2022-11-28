@@ -19,11 +19,12 @@ void resizeCont(Contacto *&array, int &N, int cantidad_aumentar);
 void resizeCons(Consultas *&array, int &N, int cantidad_aumentar); 
 void resizeMed(Medico *&array, int &N, int cantidad_aumentar); 
 
-//crear lista grande
+//crear lista grande --> unificar falta terminar
 void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas, Medico *&ArrMed, int &N);
 void copiarConsMed(Consultas*& ArrConsultas, int &i, Medico*& ArrMed, int &j);
 
 
-
+int Contactar();
+bool creoListas(Paciente *&array, int &N); //falta sacar la excepcion
 
 #endif

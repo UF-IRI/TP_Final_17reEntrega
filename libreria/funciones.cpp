@@ -66,7 +66,7 @@ bool abrirContacto(string path, Contacto *&ArrContacto, int &N, int cantidad_aum
         if(i==N-1){
                 resizeCont(ArrContacto, N, cantidad_aumentar); 
         }
-       cont >> ArrContacto[i].DNI >> coma;
+       getline(cont,ArrContacto[i].DNI, ',' ); 
        getline(cont,ArrContacto[i].telefono, ',' ); 
        getline(cont,ArrContacto[i].celular , ',' ); 
        getline(cont,ArrContacto[i].direccion, ',' ); 
@@ -179,6 +179,10 @@ bool abrirMedico(string path, Medico *&ArrMed, int &N, int cantidad_aumentar){
 
 void resizePac(Paciente *&array, int &N, int cantidad_aumentar) 
 {
+    if(array == nullptr){
+        cout<<"Error"<<endl;
+        return;
+    }
     N = N + cantidad_aumentar;
 	int i = 0;
 	Paciente *aux = new Paciente[N];
@@ -194,6 +198,11 @@ void resizePac(Paciente *&array, int &N, int cantidad_aumentar)
 
 void resizeCont(Contacto *&array, int &N, int cantidad_aumentar) 
 {
+    if(array == nullptr){
+        cout<<"Error"<<endl;
+        return;
+    }
+
     N = N + cantidad_aumentar;
 	int i = 0;
 	Contacto *aux = new Contacto[N];
@@ -210,6 +219,11 @@ void resizeCont(Contacto *&array, int &N, int cantidad_aumentar)
 
 void resizeCons(Consultas *&array, int &N, int cantidad_aumentar) 
 {
+    if(array == nullptr){
+        cout<<"Error"<<endl;
+        return;
+    }
+
     N = N + cantidad_aumentar;
 	int i = 0;
 	Consultas *aux = new Consultas[N];
@@ -239,6 +253,17 @@ void resizeMed(Medico *&array, int &N, int cantidad_aumentar)
 }
 
 
+void copiarConsMed(Consultas*& ArrConsultas, int &i, Medico*& ArrMed, int &j)
+{
+	ArrConsultas[i].medico.activo = ArrMed[j].activo;
+	ArrConsultas[i].medico.apellido = ArrMed[j].apellido;
+	ArrConsultas[i].medico.especialidad = ArrMed[j].especialidad;
+	ArrConsultas[i].medico.matricula = ArrMed[j].matricula;
+	ArrConsultas[i].medico.nombre = ArrMed[j].nombre;
+	ArrConsultas[i].medico.telefono = ArrMed[j].telefono;
+	return;
+}
+
 void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas, Medico *&ArrMed, int &N){
 
     int i, j;
@@ -256,15 +281,100 @@ void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas
         }
     }
 
+    //double max = 0.00;
+
+
 }
 
-void copiarConsMed(Consultas*& ArrConsultas, int &i, Medico*& ArrMed, int &j)
-{
-	ArrConsultas[i].medico.activo = ArrMed[j].activo;
-	ArrConsultas[i].medico.apellido = ArrMed[j].apellido;
-	ArrConsultas[i].medico.especialidad = ArrMed[j].especialidad;
-	ArrConsultas[i].medico.matricula = ArrMed[j].matricula;
-	ArrConsultas[i].medico.nombre = ArrMed[j].nombre;
-	ArrConsultas[i].medico.telefono = ArrMed[j].telefono;
-	return;
+
+int Contactar()
+ {
+    int aux;
+    //cout << "Cual fue la respuesta del paciente?" << endl; //la respuesta la hace un random
+    aux = rand()% (4-1) + 1;
+   //cout << "Respuesta del paciente:" << aux << endl;
+    return aux;
+ }
+
+
+
+ bool creoListas(Paciente *&array, int &N){
+    
+    int i = 0;
+    if(array == nullptr){
+        cout<<"Error"<<endl;
+        return false;
+    }
+
+    time_t now;
+    time(&now);
+    int diferencia;
+
+    double fecha = 0.00; //no hace falta inicializar
+    fecha = array[i].UltimaConsulta.fecha_turno.tm_year * 10000 + array[i].UltimaConsulta.fecha_turno.tm_mon *100 + array[i].UltimaConsulta.fecha_turno.tm_mday;
+
+    for(i=0; i<N; i++){
+       diferencia = difftime(now,fecha); //calculo de los años
+       
+       if(array[i].estado == "fallecido" || diferencia >= 10){ //si esta muerto o pasaron mas de 10 años
+            //array[i].archivado = "ARCHIVADO";
+       }
+
+       else if (array[i].estado == "internado" || fecha >= now){ //si esta internado o tiene un turno a futuro
+            //array[i].archivado = "ACTIVO";
+       }
+
+       else
+             //array[i].archivado = "CONTACTAR";
+             cout<<"hola";
+
+    }
+ 
+    //creo archivos csv 
+
+
+    //imprimo
+
+    for(i=0; i<N; i++){
+        if(array[i].archivado == "ARCHIVADO" &&  array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
+            //imprimir en el archivo de archivados
+        }
+
+        else if(array[i].estado == "ACTIVO" && array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){ 
+        
+            //imprimir en el archivo de activos
+
+        }
+
+    else if (array[i].estado == "CONTACTAR" && array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){ //los que tenemos que contactar
+            int answer = Contactar();
+            
+            switch(answer){
+                case 1: //muerto
+                    //imprimir en el archivo de archivados
+                    break;
+
+                case 2: //not back
+                    //imprimir en el archivo de archivados
+                    break;
+
+                case 3: //quiere volver
+                    //imprimir en el archivo de activos
+                    break;
+
+                case 4: //not found
+                    //imprimir en el archivo de no encontrados
+                    break;
+
+                default:
+                    cout<<"ERROR al contactar"<<endl;
+                    break;
+            }
+
+        }
+
+    }
+
+    return true;
+
 }
