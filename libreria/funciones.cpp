@@ -317,36 +317,19 @@ int Contactar()
        diferencia = difftime(now,fecha); //calculo de los años
        
        if(array[i].estado == "fallecido" || diferencia >= 10){ //si esta muerto o pasaron mas de 10 años
-            //array[i].archivado = "ARCHIVADO";
+            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
+            //imprimir en el archivo de archivados
+            }
        }
 
        else if (array[i].estado == "internado" || fecha >= now){ //si esta internado o tiene un turno a futuro
-            //array[i].archivado = "ACTIVO";
+            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
+            //imprimir en el archivo de activos
+            }
        }
 
        else
-             //array[i].archivado = "CONTACTAR";
-             cout<<"hola";
-
-    }
- 
-    //creo archivos csv 
-
-
-    //imprimo
-
-    for(i=0; i<N; i++){
-        if(array[i].archivado == "ARCHIVADO" &&  array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
-            //imprimir en el archivo de archivados
-        }
-
-        else if(array[i].estado == "ACTIVO" && array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){ 
-        
-            //imprimir en el archivo de activos
-
-        }
-
-    else if (array[i].estado == "CONTACTAR" && array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){ //los que tenemos que contactar
+            if (array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){ //los que tenemos que contactar
             int answer = Contactar();
             
             switch(answer){
