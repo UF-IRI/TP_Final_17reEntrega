@@ -53,7 +53,7 @@ int main() {
          cout<<"no se pudo abrir y crear la lista";
     }
     
-    //unificar(array, ArrContacto, ArrConsultas, ArrMed, N); //falta terminar
+    unificar(array, ArrContacto, ArrConsultas, ArrMed, N); 
 
 
     delete[] ArrContacto;
