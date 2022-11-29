@@ -1,6 +1,6 @@
 #include "funciones.h"
 
-bool abrirPaciente(string path, Paciente *&array, int &N, int cantidad_aumentar){
+bool abrirPaciente(string path, Paciente *&array, int N, int cantidad_aumentar){
     if(array == nullptr){
         return false;
     }
@@ -41,7 +41,7 @@ bool abrirPaciente(string path, Paciente *&array, int &N, int cantidad_aumentar)
 
 }
 
-bool abrirContacto(string path, Contacto *&ArrContacto, int &N, int cantidad_aumentar){
+bool abrirContacto(string path, Contacto *&ArrContacto, int N, int cantidad_aumentar){
     if(ArrContacto == nullptr){
         return false;
     }
@@ -80,7 +80,7 @@ bool abrirContacto(string path, Contacto *&ArrContacto, int &N, int cantidad_aum
 
 }
 
-bool abrirConsultas(string path, Consultas *&ArrConsultas, int &N, int cantidad_aumentar){
+bool abrirConsultas(string path, Consultas *&ArrConsultas, int N, int cantidad_aumentar){
      if(ArrConsultas == nullptr){
         return false;
     }
@@ -135,7 +135,7 @@ bool abrirConsultas(string path, Consultas *&ArrConsultas, int &N, int cantidad_
 
 }
 
-bool abrirMedico(string path, Medico *&ArrMed, int &N, int cantidad_aumentar){
+bool abrirMedico(string path, Medico *&ArrMed, int N, int cantidad_aumentar){
     if(ArrMed == nullptr){
         return false;
     }
@@ -253,7 +253,7 @@ void resizeMed(Medico *&array, int &N, int cantidad_aumentar)
 }
 
 
-void copiarConsMed(Consultas*& ArrConsultas, int &i, Medico*& ArrMed, int &j)
+void copiarConsMed(Consultas*& ArrConsultas, int i, Medico*& ArrMed, int j)
 {
 	ArrConsultas[i].medico.activo = ArrMed[j].activo;
 	ArrConsultas[i].medico.apellido = ArrMed[j].apellido;
@@ -264,7 +264,45 @@ void copiarConsMed(Consultas*& ArrConsultas, int &i, Medico*& ArrMed, int &j)
 	return;
 }
 
-void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas, Medico *&ArrMed, int &N){
+void copiarPacCons(Paciente*& array, int i, Consultas*& ArrConsultas, int j, double max)
+{
+    double aux = array[i].UltimaConsulta.fecha_turno.tm_year * 10000 + array[i].UltimaConsulta.fecha_turno.tm_mon *100 + array[i].UltimaConsulta.fecha_turno.tm_mday;
+    if (aux > max)
+    {
+      array[i].UltimaConsulta.fecha_solicitado.tm_mday = ArrConsultas[j].fecha_solicitado.tm_mday;
+      array[i].UltimaConsulta.fecha_solicitado.tm_mon = ArrConsultas[j].fecha_solicitado.tm_mon;
+      array[i].UltimaConsulta.fecha_solicitado.tm_year = ArrConsultas[j].fecha_solicitado.tm_year;
+      array[i].UltimaConsulta.fecha_turno.tm_mday = ArrConsultas[j].fecha_turno.tm_mday;
+      array[i].UltimaConsulta.fecha_turno.tm_mon = ArrConsultas[j].fecha_turno.tm_mon;
+      array[i].UltimaConsulta.fecha_turno.tm_year = ArrConsultas[j].fecha_turno.tm_year;
+      array[i].UltimaConsulta.presento = ArrConsultas[j].presento;      
+      array[i].UltimaConsulta.medico.nombre = ArrConsultas[j].medico.nombre;
+      array[i].UltimaConsulta.medico.apellido = ArrConsultas[j].medico.apellido;
+      array[i].UltimaConsulta.medico.activo = ArrConsultas[j].medico.activo;
+      array[i].UltimaConsulta.medico.especialidad = ArrConsultas[j].medico.especialidad;
+      array[i].UltimaConsulta.medico.matricula = ArrConsultas[j].medico.matricula;
+      array[i].UltimaConsulta.medico.telefono = ArrConsultas[j].medico.telefono;
+
+      max = aux;
+
+    }
+    
+    return;
+
+}
+
+ void copiarPacCont(Paciente *&array, int i, Contacto *&ArrContacto, int j)
+ {
+    array[i].contacto.telefono = ArrContacto[j].telefono;
+    array[i].contacto.celular = ArrContacto[j].celular;
+    array[i].contacto.direccion = ArrContacto[j].direccion;
+    array[i].contacto.mail = ArrContacto[j].mail;
+
+    return;
+
+ }
+
+void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas, Medico *&ArrMed, int N){
 
     int i, j;
     ArrConsultas[i].TieneMed = false;
@@ -281,8 +319,24 @@ void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas
         }
     }
 
-    //double max = 0.00;
-
+    double max = 0.00;
+    for (i=0 ;i<N ;i++){ //recorre pacientes
+        for(j=0; j<N ;j++){ //recorre las otras listas
+            if(array[i].DNI == ArrConsultas[j].DNI){
+                copiarPacCons(array, i, ArrConsultas, j, max);
+                array[i].TieneCons = true; 
+                if(ArrConsultas[i].TieneMed == true){
+                    array[i].TieneMed_enPac = true; 
+                }  
+            }
+                
+            if(array[i].DNI == ArrContacto[j].DNI){
+                copiarPacCont(array,i, ArrContacto,j); 
+                array[i].TieneCont =true; 
+                    
+            }
+        }
+    }
 
 }
 
@@ -297,8 +351,7 @@ int Contactar()
  }
 
 
-
- bool creoListas(Paciente *&array, int &N){
+ bool creoListas(Paciente *&array, int N){
     
     int i = 0;
     if(array == nullptr){
@@ -306,6 +359,50 @@ int Contactar()
         return false;
     }
 
+    fstream arch, act, nf; //archivados, activos, not found
+    string pathArch = "Archivados.csv";
+    string pathAct = "Activos.csv";
+    string pathNF = "NoEncontrados.csv";
+
+    //archivo archivados
+    arch.open(pathArch, ios::app);
+    if (!(arch.is_open())){
+      cout<< "no se creo el archivo" <<endl;
+            return false;
+    }
+    else
+        cout<< "se creo el archivo" << endl;
+
+    //archivo activos
+    act.open(pathAct, ios::app);
+    if (!(act.is_open())){
+      cout<< "no se creo el archivo" <<endl;
+            return false;
+    }
+    else
+        cout<< "se creo el archivo" << endl;
+
+    //archivo no encontrados
+    nf.open(pathNF, ios::app);
+    if (!(nf.is_open())){
+      cout<< "no se creo el archivo" <<endl;
+            return false;
+    }
+    else
+        cout<< "se creo el archivo" << endl;
+
+    //imprimimos los headers
+    char coma = ',';
+    arch << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social";
+    act << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social";
+    nf << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social";
+    
+
+    int j = 0;
+    int l = 0;
+    int q = 0;
+
+    //algoritmo de busqueda
     time_t now;
     time(&now);
     int diferencia;
@@ -317,36 +414,42 @@ int Contactar()
        diferencia = difftime(now,fecha); //calculo de los años
        
        if(array[i].estado == "fallecido" || diferencia >= 10){ //si esta muerto o pasaron mas de 10 años
-            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
-            //imprimir en el archivo de archivados
+            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneCons == true && array[i].TieneMed_enPac == true){
+                arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
+                j++;  
             }
        }
 
        else if (array[i].estado == "internado" || fecha >= now){ //si esta internado o tiene un turno a futuro
-            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
-            //imprimir en el archivo de activos
+            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneCons == true && array[i].TieneMed_enPac == true){
+                act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << endl;
+                l++;  
             }
        }
 
        else
-            if (array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){ //los que tenemos que contactar
+            if (array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneCons == true && array[i].TieneMed_enPac == true){ //los que tenemos que contactar
             int answer = Contactar();
             
             switch(answer){
                 case 1: //muerto
-                    //imprimir en el archivo de archivados
+                    arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
+                    j++;  
                     break;
 
                 case 2: //not back
-                    //imprimir en el archivo de archivados
+                    arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
+                    j++; 
                     break;
 
                 case 3: //quiere volver
-                    //imprimir en el archivo de activos
+                    act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << endl;
+                    l++;  
                     break;
 
                 case 4: //not found
-                    //imprimir en el archivo de no encontrados
+                    nf << array[q].DNI << coma << array[q].nombre << coma << array[q].apellido << coma << array[q].sexo << coma << array[q].natalicio << coma << array[q].estado << coma << array[q].id_os << endl;
+                    q++;  
                     break;
 
                 default:
@@ -358,6 +461,9 @@ int Contactar()
 
     }
 
+    arch.close();
+    act.close();
+    nf.close();
     return true;
 
 }

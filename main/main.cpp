@@ -72,10 +72,12 @@ int main() {
         cout<<"no se pudo crear las listas de salida";
     }
 
-
     delete[] array;
     array = NULL;
 
-
     return EXIT_SUCCESS;
 }
+
+
+
+
