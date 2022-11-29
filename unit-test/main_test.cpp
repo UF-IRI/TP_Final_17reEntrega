@@ -394,6 +394,61 @@ namespace Copiar {
 
 	}
 
+    TEST(TestCopiar3, PacCons) {
+        
+       
+       Consultas *ArrConsultas = new Consultas[4];
+       Paciente *array = new Paciente[5];
+       
+	    ArrConsultas[0].fecha_solicitado.tm_mday = 01;
+        ArrConsultas[0].fecha_solicitado.tm_mon = 11;
+        ArrConsultas[0].fecha_solicitado.tm_year = 2001;
+        ArrConsultas[0].fecha_turno.tm_mday = 19;
+        ArrConsultas[0].fecha_turno.tm_mon = 12;
+        ArrConsultas[0].fecha_turno.tm_year = 2001;
+        ArrConsultas[0].presento = true;
+        ArrConsultas[0].medico.matricula = "00-334-0838";
+
+        ArrConsultas[1].fecha_solicitado.tm_mday = 26;
+        ArrConsultas[1].fecha_solicitado.tm_mon = 01;
+        ArrConsultas[1].fecha_solicitado.tm_year = 2009;
+        ArrConsultas[1].fecha_turno.tm_mday = 20;
+        ArrConsultas[1].fecha_turno.tm_mon = 02;
+        ArrConsultas[1].fecha_turno.tm_year = 2009;
+        ArrConsultas[1].presento = true;
+        ArrConsultas[1].medico.matricula = "23-279-3287";
+       
+	   double max = 0.00;
+
+       copiarPacCons(array, 3, ArrConsultas, 0, max);
+
+	   max = 0.00;
+	   copiarPacCons(array, 2, ArrConsultas, 1, max);
+	   
+	   //EXPECT_EQ(array[3].UltimaConsulta.fecha_solicitado.tm_mday, ArrConsultas[0].fecha_solicitado.tm_mday);   
+	   //EXPECT_EQ(array[3].UltimaConsulta.fecha_solicitado.tm_mon, ArrConsultas[0].fecha_solicitado.tm_mon); 
+	  // EXPECT_EQ(array[3].UltimaConsulta.fecha_solicitado.tm_year, ArrConsultas[0].fecha_solicitado.tm_year);  
+	  // EXPECT_EQ(array[3].UltimaConsulta.fecha_turno.tm_mday, ArrConsultas[0].fecha_turno.tm_mday);    
+	   //EXPECT_EQ(array[3].UltimaConsulta.fecha_turno.tm_mon, ArrConsultas[0].fecha_turno.tm_mon);    
+	   //EXPECT_EQ(array[3].UltimaConsulta.fecha_turno.tm_year, ArrConsultas[0].fecha_turno.tm_year);    
+	   EXPECT_EQ(array[3].UltimaConsulta.presento, ArrConsultas[0].presento);    
+	   EXPECT_EQ(array[3].UltimaConsulta.medico.matricula, ArrConsultas[0].medico.matricula);
+          
+	  // EXPECT_EQ(array[2].UltimaConsulta.fecha_solicitado.tm_mday, ArrConsultas[1].fecha_solicitado.tm_mday);   
+	   //EXPECT_EQ(array[2].UltimaConsulta.fecha_solicitado.tm_mon, ArrConsultas[1].fecha_solicitado.tm_mon); 
+	   //EXPECT_EQ(array[2].UltimaConsulta.fecha_solicitado.tm_year, ArrConsultas[1].fecha_solicitado.tm_year);  
+	   //EXPECT_EQ(array[2].UltimaConsulta.fecha_turno.tm_mday, ArrConsultas[1].fecha_turno.tm_mday);    
+	  // EXPECT_EQ(array[2].UltimaConsulta.fecha_turno.tm_mon, ArrConsultas[1].fecha_turno.tm_mon);    
+	  // EXPECT_EQ(array[2].UltimaConsulta.fecha_turno.tm_year, ArrConsultas[1].fecha_turno.tm_year);    
+	   EXPECT_EQ(array[2].UltimaConsulta.presento, ArrConsultas[1].presento);    
+	   EXPECT_EQ(array[2].UltimaConsulta.medico.matricula, ArrConsultas[1].medico.matricula); 
+    
+		delete[] ArrConsultas;
+        ArrConsultas = NULL;
+
+		delete[] array;
+    	array = NULL;
+	}
 }
 
 

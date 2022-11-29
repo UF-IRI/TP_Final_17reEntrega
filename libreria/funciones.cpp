@@ -26,12 +26,12 @@ bool abrirPaciente(string path, Paciente *&array, int N, int cantidad_aumentar){
                 resizePac(array, N, cantidad_aumentar); 
         }
         pac >> array[i].DNI >> coma;
-        getline(pac,array[i].nombre, ',' ); 
-        getline(pac,array[i].apellido, ',' ); 
-        getline(pac,array[i].sexo, ',' ); 
-        getline(pac,array[i].natalicio, ',' ); 
-        getline(pac,array[i].estado, ',' ); 
-        getline(pac,array[i].id_os); 
+        pac >> array[i].nombre >> coma;
+        pac >> array[i].apellido >> coma;
+        pac >> array[i].sexo >> coma;
+        pac >> array[i].natalicio >> coma;
+        pac >> array[i].estado >> coma;
+        pac >> array[i].id_os >> coma;
         i++;
 
     }
@@ -266,9 +266,11 @@ void copiarConsMed(Consultas*& ArrConsultas, int i, Medico*& ArrMed, int j)
 
 void copiarPacCons(Paciente*& array, int i, Consultas*& ArrConsultas, int j, double max)
 {
-    double aux = array[i].UltimaConsulta.fecha_turno.tm_year * 10000 + array[i].UltimaConsulta.fecha_turno.tm_mon *100 + array[i].UltimaConsulta.fecha_turno.tm_mday;
+    double aux = ArrConsultas[j].fecha_turno.tm_year * 10000 + ArrConsultas[j].fecha_turno.tm_mon *100 + ArrConsultas[j].fecha_turno.tm_mday;
     if (aux > max)
     {
+      array[i].UltimaConsulta.fecha_solicitado.tm_mday = 16;
+      
       array[i].UltimaConsulta.fecha_solicitado.tm_mday = ArrConsultas[j].fecha_solicitado.tm_mday;
       array[i].UltimaConsulta.fecha_solicitado.tm_mon = ArrConsultas[j].fecha_solicitado.tm_mon;
       array[i].UltimaConsulta.fecha_solicitado.tm_year = ArrConsultas[j].fecha_solicitado.tm_year;
@@ -291,8 +293,8 @@ void copiarPacCons(Paciente*& array, int i, Consultas*& ArrConsultas, int j, dou
 
 }
 
- void copiarPacCont(Paciente *&array, int i, Contacto *&ArrContacto, int j)
- {
+void copiarPacCont(Paciente *&array, int i, Contacto *&ArrContacto, int j)
+{
     array[i].contacto.telefono = ArrContacto[j].telefono;
     array[i].contacto.celular = ArrContacto[j].celular;
     array[i].contacto.direccion = ArrContacto[j].direccion;
@@ -300,7 +302,7 @@ void copiarPacCons(Paciente*& array, int i, Consultas*& ArrConsultas, int j, dou
 
     return;
 
- }
+}
 
 void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas, Medico *&ArrMed, int N){
 
@@ -319,9 +321,17 @@ void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas
         }
     }
 
-    double max = 0.00;
+    
     for (i=0 ;i<N ;i++){ //recorre pacientes
+        double max = 0.00;
         for(j=0; j<N ;j++){ //recorre las otras listas
+        
+            if(array[i].DNI == ArrContacto[j].DNI){
+                copiarPacCont(array,i, ArrContacto,j); 
+                array[i].TieneCont =true; 
+                    
+            }
+
             if(array[i].DNI == ArrConsultas[j].DNI){
                 copiarPacCons(array, i, ArrConsultas, j, max);
                 array[i].TieneCons = true; 
@@ -329,29 +339,22 @@ void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas
                     array[i].TieneMed_enPac = true; 
                 }  
             }
-                
-            if(array[i].DNI == ArrContacto[j].DNI){
-                copiarPacCont(array,i, ArrContacto,j); 
-                array[i].TieneCont =true; 
-                    
-            }
         }
     }
 
 }
 
 
-int Contactar()
- {
+int Contactar(){
     int aux;
     //cout << "Cual fue la respuesta del paciente?" << endl; //la respuesta la hace un random
     aux = rand()% (4-1) + 1;
-   //cout << "Respuesta del paciente:" << aux << endl;
+    //cout << "Respuesta del paciente:" << aux << endl;
     return aux;
- }
+}
 
 
- bool creoListas(Paciente *&array, int N){
+bool creoListas(Paciente *&array, int N){
     
     int i = 0;
     if(array == nullptr){
@@ -365,7 +368,7 @@ int Contactar()
     string pathNF = "NoEncontrados.csv";
 
     //archivo archivados
-    arch.open(pathArch, ios::app);
+    arch.open(pathArch, ios::out);
     if (!(arch.is_open())){
       cout<< "no se creo el archivo" <<endl;
             return false;
@@ -374,7 +377,7 @@ int Contactar()
         cout<< "se creo el archivo" << endl;
 
     //archivo activos
-    act.open(pathAct, ios::app);
+    act.open(pathAct, ios::out);
     if (!(act.is_open())){
       cout<< "no se creo el archivo" <<endl;
             return false;
@@ -383,7 +386,7 @@ int Contactar()
         cout<< "se creo el archivo" << endl;
 
     //archivo no encontrados
-    nf.open(pathNF, ios::app);
+    nf.open(pathNF, ios::out);
     if (!(nf.is_open())){
       cout<< "no se creo el archivo" <<endl;
             return false;
@@ -393,10 +396,10 @@ int Contactar()
 
     //imprimimos los headers
     char coma = ',';
-    arch << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social";
-    act << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social";
-    nf << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social";
-    
+    arch << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" <<endl;
+    act << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social"<<endl;
+    nf << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social"<<endl;
+
 
     int j = 0;
     int l = 0;
@@ -408,12 +411,12 @@ int Contactar()
     int diferencia;
 
     double fecha = 0.00; //no hace falta inicializar
-    fecha = array[i].UltimaConsulta.fecha_turno.tm_year * 10000 + array[i].UltimaConsulta.fecha_turno.tm_mon *100 + array[i].UltimaConsulta.fecha_turno.tm_mday;
-
+    fecha = (array[i].UltimaConsulta.fecha_turno.tm_year *365*24*3600) + (array[i].UltimaConsulta.fecha_turno.tm_mon *30*24*3600) + (array[i].UltimaConsulta.fecha_turno.tm_mday *24*3600); //convertimos la fecha a segundos
+    
     for(i=0; i<N; i++){
        diferencia = difftime(now,fecha); //calculo de los años
        
-       if(array[i].estado == "fallecido" || diferencia >= 10){ //si esta muerto o pasaron mas de 10 años
+       if(array[i].estado == "fallecido" || diferencia >= 315360000){ //si esta muerto o pasaron mas de 10 años (en segundos)
             if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneCons == true && array[i].TieneMed_enPac == true){
                 arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
                 j++;  

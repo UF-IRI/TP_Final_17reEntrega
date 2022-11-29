@@ -19,7 +19,7 @@ void resizeCont(Contacto *&array, int &N, int cantidad_aumentar);
 void resizeCons(Consultas *&array, int &N, int cantidad_aumentar); 
 void resizeMed(Medico *&array, int &N, int cantidad_aumentar); 
 
-//crear lista grande --> unificar falta terminar
+//crear lista grande
 void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas, Medico *&ArrMed, int N);
 void copiarConsMed(Consultas*& ArrConsultas, int i, Medico*& ArrMed, int j);
 void copiarPacCons(Paciente*& array, int i, Consultas*& ArrConsultas, int j, double max);
