@@ -26,9 +26,6 @@ void copiarPacCons(Paciente*& array, int i, Consultas*& ArrConsultas, int j, dou
 void copiarPacCont(Paciente *&array, int i, Contacto *&ArrContacto, int j);
 
 int Contactar();
-bool crearSalida(string path, fstream fp);
 bool creoListas(Paciente *&array, int N); //falta sacar la excepcion
 
-#endif
-
-    
+#endif    
