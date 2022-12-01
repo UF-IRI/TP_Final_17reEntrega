@@ -31,7 +31,7 @@ bool abrirPaciente(string path, Paciente *&array, int N, int cantidad_aumentar){
         pac >> array[i].sexo >> coma;
         pac >> array[i].natalicio >> coma;
         pac >> array[i].estado >> coma;
-        pac >> array[i].id_os >> coma;
+        getline(pac,array[i].id_os, '\n'); 
         i++;
 
     }
@@ -164,8 +164,8 @@ bool abrirMedico(string path, Medico *&ArrMed, int N, int cantidad_aumentar){
         getline(med,ArrMed[i].nombre, ',' ); 
         getline(med,ArrMed[i].apellido, ',' ); 
         getline(med,ArrMed[i].telefono, ',' ); 
-        getline(med,ArrMed[i].especialidad, ',' ); 
-        med >> ArrMed[i].activo;
+        getline(med,ArrMed[i].especialidad, ',' );
+        med<<ArrMed[i].activo;
         i++;
 
     }
@@ -307,9 +307,12 @@ void copiarPacCont(Paciente *&array, int i, Contacto *&ArrContacto, int j)
 void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas, Medico *&ArrMed, int N){
 
     int i, j;
-    ArrConsultas[i].TieneMed = false;
-    array[i].TieneCont = false;
-    array[i].TieneCons = false;
+    for(i=0; i<N; i++){
+        ArrConsultas[i].TieneMed = false;
+        array[i].TieneCont = false;
+        array[i].TieneCons = false;
+    }
+    
 
     for (i = 0; i < N; i++) { //recorre Consulta
         for (j = 0; j < N; j++) { //recorre medicos
@@ -417,21 +420,21 @@ bool creoListas(Paciente *&array, int N){
        diferencia = difftime(now,fecha); //calculo de los años
        
        if(array[i].estado == "fallecido" || diferencia >= 315360000){ //si esta muerto o pasaron mas de 10 años (en segundos)
-            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneCons == true && array[i].TieneMed_enPac == true){
+            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
                 arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
                 j++;  
             }
        }
 
        else if (array[i].estado == "internado" || fecha >= now){ //si esta internado o tiene un turno a futuro
-            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneCons == true && array[i].TieneMed_enPac == true){
+            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
                 act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << endl;
                 l++;  
             }
        }
 
        else
-            if (array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneCons == true && array[i].TieneMed_enPac == true){ //los que tenemos que contactar
+            if (array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){ //los que tenemos que contactar
             int answer = Contactar();
             
             switch(answer){
