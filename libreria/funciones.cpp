@@ -1,180 +1,5 @@
 #include "funciones.h"
 
-bool abrirPaciente(string path, Paciente *&array, int N, int cantidad_aumentar){
-    if(array == nullptr){
-        return false;
-    }
-
-    fstream pac;
-    pac.open(path, ios::in);
-    
-    if (!(pac.is_open())){
-      cout<< "no se abrio el archivo" <<endl;
-            return false;
-    }
-    else
-        cout<< "se abrio el archivo" << endl;
-
-    int i = 0;
-    string dummy;
-    char coma;
-
-    getline(pac, dummy); //leo el header
-
-    while(pac){
-        if(i==N-1){
-                resizePac(array, N, cantidad_aumentar); 
-        }
-        pac >> array[i].DNI >> coma;
-        pac >> array[i].nombre >> coma;
-        pac >> array[i].apellido >> coma;
-        pac >> array[i].sexo >> coma;
-        pac >> array[i].natalicio >> coma;
-        pac >> array[i].estado >> coma;
-        getline(pac,array[i].id_os, '\n'); 
-        i++;
-
-    }
-
-    pac.close();
-    return true;
-
-}
-
-bool abrirContacto(string path, Contacto *&ArrContacto, int N, int cantidad_aumentar){
-    if(ArrContacto == nullptr){
-        return false;
-    }
-
-    fstream cont;
-    cont.open(path, ios::in);
-    
-    if (!(cont.is_open())){
-      cout<< "no se abrio el archivo" <<endl;
-            return false;
-    }
-    else
-        cout<< "se abrio el archivo" << endl;
-
-    int i = 0;
-    string dummy;
-    char coma;
-
-    getline(cont, dummy); //leo el header
-
-    while(cont){
-        if(i==N-1){
-                resizeCont(ArrContacto, N, cantidad_aumentar); 
-        }
-       getline(cont,ArrContacto[i].DNI, ',' ); 
-       getline(cont,ArrContacto[i].telefono, ',' ); 
-       getline(cont,ArrContacto[i].celular , ',' ); 
-       getline(cont,ArrContacto[i].direccion, ',' ); 
-       getline(cont,ArrContacto[i].mail); 
-       i++;
-
-    }
-
-    cont.close();
-    return true;
-
-}
-
-bool abrirConsultas(string path, Consultas *&ArrConsultas, int N, int cantidad_aumentar){
-     if(ArrConsultas == nullptr){
-        return false;
-    }
-
-    fstream cons;
-    cons.open(path, ios::in);
-
-     if (!(cons.is_open())){
-      cout<< "no se abrio el archivo" <<endl;
-            return false;
-    }
-    else
-        cout<< "se abrio el archivo" << endl;
-
-    int i = 0;
-    string dummy;
-    char coma;
-    string auxSoli_dia, auxSoli_mes, auxSoli_year;
-    string auxTurno_dia, auxTurno_mes, auxTurno_year;
-    
-
-
-    getline(cons, dummy); //leo el header
-    
-    while(cons){
-        if(i==N-1){
-                resizeCons(ArrConsultas, N, cantidad_aumentar); 
-        }
-    cons >> ArrConsultas[i].DNI >> coma;
-    getline(cons,auxSoli_dia, '/' ); 
-    getline(cons,auxSoli_mes, '/' ); 
-    getline(cons,auxSoli_year, ','); 
-    getline(cons,auxTurno_dia, '/' ); 
-    getline(cons,auxTurno_mes, '/' ); 
-    getline(cons,auxTurno_year, ','); 
-    cons >> ArrConsultas[i].presento >> coma;
-    getline(cons,ArrConsultas[i].medico.matricula); 
-
-    ArrConsultas[i].fecha_solicitado.tm_mday = stod(auxSoli_dia);
-    ArrConsultas[i].fecha_solicitado.tm_mon = stod(auxSoli_mes);
-    ArrConsultas[i].fecha_solicitado.tm_year = stod(auxSoli_year);
-
-    ArrConsultas[i].fecha_turno.tm_mday = stod(auxTurno_dia);
-    ArrConsultas[i].fecha_turno.tm_mon = stod(auxTurno_mes);
-    ArrConsultas[i].fecha_turno.tm_year = stod(auxTurno_year);
-    i++;
-
-    }
-
-    cons.close();
-    return true;
-
-}
-
-bool abrirMedico(string path, Medico *&ArrMed, int N, int cantidad_aumentar){
-    if(ArrMed == nullptr){
-        return false;
-    }
-
-    fstream med;
-    med.open(path, ios::in);
-    
-    if (!(med.is_open())){
-      cout<< "no se abrio el archivo" <<endl;
-            return false;
-    }
-    else
-        cout<< "se abrio el archivo" << endl;
-
-    int i = 0;
-    string dummy;
-    char coma;
-
-    getline(med, dummy); //leo el header
-
-    while(med){
-        if(i==N-1){
-                resizeMed(ArrMed, N, cantidad_aumentar); 
-        }
-        getline(med,ArrMed[i].matricula, ',' ); 
-        getline(med,ArrMed[i].nombre, ',' ); 
-        getline(med,ArrMed[i].apellido, ',' ); 
-        getline(med,ArrMed[i].telefono, ',' ); 
-        getline(med,ArrMed[i].especialidad, ',' );
-        med<<ArrMed[i].activo;
-        i++;
-
-    }
-
-    med.close();
-    return true;
-
-}
-
 
 
 void resizePac(Paciente *&array, int &N, int cantidad_aumentar) 
@@ -239,6 +64,11 @@ void resizeCons(Consultas *&array, int &N, int cantidad_aumentar)
 
 void resizeMed(Medico *&array, int &N, int cantidad_aumentar) 
 {
+     if(array == nullptr){
+        cout<<"Error"<<endl;
+        return;
+    }
+
     N = N + cantidad_aumentar;
 	int i = 0;
 	Medico *aux = new Medico[N];
@@ -253,37 +83,204 @@ void resizeMed(Medico *&array, int &N, int cantidad_aumentar)
 }
 
 
-void copiarConsMed(Consultas*& ArrConsultas, int i, Medico*& ArrMed, int j)
+bool abrirPaciente(string path, Paciente *&array, int N, int cantidad_aumentar){
+    if(array == nullptr){
+        return false;
+    }
+
+    fstream pac;
+    pac.open(path, ios::in);
+    
+    if (!(pac.is_open())){
+      cout<< "no se abrio el archivo" <<endl;
+            return false;
+    }
+    else
+        cout << "se abrio el archivo" << endl;
+
+    int i = 0;
+    string dummy;
+    char coma;
+
+    getline(pac, dummy); //leo el header
+
+    while(pac){
+        if(i==N-1){
+                resizePac(array, N, cantidad_aumentar); 
+        }
+        pac >> array[i].DNI >> coma;
+        pac >> array[i].nombre >> coma;
+        pac >> array[i].apellido >> coma;
+        pac >> array[i].sexo >> coma;
+        pac >> array[i].natalicio >> coma;
+        pac >> array[i].estado >> coma;
+        getline(pac,array[i].id_os); 
+        i++;
+
+    }
+
+    pac.close();
+    return true;
+
+}
+
+bool abrirContacto(string path, Contacto *&ArrContacto, int N, int cantidad_aumentar){
+    if(ArrContacto == nullptr){
+        return false;
+    }
+
+    fstream cont;
+    cont.open(path, ios::in);
+    
+    if (!(cont.is_open())){
+      cout<< "no se abrio el archivo" <<endl;
+            return false;
+    }
+    else
+        cout << "se abrio el archivo" << endl;
+
+    int i = 0;
+    string dummy;
+    char coma;
+
+    getline(cont, dummy); //leo el header
+
+    while(cont){
+        if(i==N-1){
+                resizeCont(ArrContacto, N, cantidad_aumentar); 
+        }
+       getline(cont,ArrContacto[i].DNI, ',' ); 
+       getline(cont,ArrContacto[i].telefono, ',' ); 
+       getline(cont,ArrContacto[i].celular , ',' ); 
+       getline(cont,ArrContacto[i].direccion, ',' ); 
+       getline(cont,ArrContacto[i].mail); 
+       i++;
+
+    }
+
+    cont.close();
+    return true;
+
+}
+
+bool abrirConsultas(string path, Consultas *&ArrConsultas, int N, int cantidad_aumentar){
+     if(ArrConsultas == nullptr){
+        return false;
+    }
+
+    fstream cons;
+    cons.open(path, ios::in);
+
+     if (!(cons.is_open())){
+      cout << "no se abrio el archivo" <<endl;
+            return false;
+    }
+    else
+        cout << "se abrio el archivo" << endl;
+
+    int i = 0;
+    string dummy;
+    char coma;
+    string auxSoli_dia, auxSoli_mes, auxSoli_year;
+    string auxTurno_dia, auxTurno_mes, auxTurno_year;
+    
+
+
+    getline(cons, dummy); //leo el header
+    
+    while(cons){
+        if(i==N-1){
+                resizeCons(ArrConsultas, N, cantidad_aumentar); 
+        }
+    cons >> ArrConsultas[i].DNI >> coma;
+    getline(cons,auxSoli_dia, '/' ); 
+    getline(cons,auxSoli_mes, '/' ); 
+    getline(cons,auxSoli_year, ','); 
+    getline(cons,auxTurno_dia, '/' ); 
+    getline(cons,auxTurno_mes, '/' ); 
+    getline(cons,auxTurno_year, ','); 
+    cons >> ArrConsultas[i].presento >> coma;
+    getline(cons,ArrConsultas[i].medico.matricula); 
+
+    ArrConsultas[i].fecha_solicitado.tm_mday = stod(auxSoli_dia);
+    ArrConsultas[i].fecha_solicitado.tm_mon = stod(auxSoli_mes);
+    ArrConsultas[i].fecha_solicitado.tm_year = stod(auxSoli_year);
+
+    ArrConsultas[i].fecha_turno.tm_mday = stod(auxTurno_dia);
+    ArrConsultas[i].fecha_turno.tm_mon = stod(auxTurno_mes);
+    ArrConsultas[i].fecha_turno.tm_year = stod(auxTurno_year);
+    i++;
+
+    }
+
+    cons.close();
+    return true;
+
+}
+
+bool abrirMedico(string path, Medico *&ArrMed, int N, int cantidad_aumentar){
+    if(ArrMed == nullptr){
+        return false;
+    }
+
+    fstream med;
+    med.open(path, ios::in);
+    
+    if (!(med.is_open())){
+      cout << "no se abrio el archivo" <<endl;
+            return false;
+    }
+    else
+        cout << "se abrio el archivo" << endl;
+
+    int i = 0;
+    string dummy;
+    char coma;
+
+    getline(med, dummy); //leo el header
+
+    while(med){
+        if(i==N-1){
+                resizeMed(ArrMed, N, cantidad_aumentar); 
+        }
+        getline(med,ArrMed[i].matricula, ',' ); 
+        getline(med,ArrMed[i].nombre, ',' ); 
+        getline(med,ArrMed[i].apellido, ',' ); 
+        getline(med,ArrMed[i].telefono, ',' ); 
+        getline(med,ArrMed[i].especialidad, ',' );
+        med >> ArrMed[i].activo;
+        i++;
+
+    }
+
+    med.close();
+    return true;
+
+}
+
+
+void copiarConsMed(Consultas*& ArrConsultas, int i, Medico*& ArrMed, int j) //no es necesario hacer una funcion para esto, pero al hacerla le podemos hacer un unit-test para verificar que funcione
 {
-	ArrConsultas[i].medico.activo = ArrMed[j].activo;
-    ArrConsultas[i].medico.nombre = ArrMed[j].nombre;
-	ArrConsultas[i].medico.apellido = ArrMed[j].apellido;
-	ArrConsultas[i].medico.especialidad = ArrMed[j].especialidad;
-	ArrConsultas[i].medico.matricula = ArrMed[j].matricula;
-	ArrConsultas[i].medico.telefono = ArrMed[j].telefono;
+	if(ArrMed == nullptr || ArrConsultas == nullptr){
+        cout<<"Error"<<endl;
+        return;
+    }
+    ArrConsultas[i].medico = ArrMed[j];
 	return;
 }
 
-void copiarPacCons(Paciente*& array, int i, Consultas*& ArrConsultas, int j, double max)
+void copiarPacCons(Paciente*& array, int i, Consultas*& ArrConsultas, int j, double &max) //no es necesario hacer una funcion para esto, pero al hacerla le podemos hacer un unit-test para verificar que funcione
 {
+    if(array == nullptr || ArrConsultas == nullptr){
+        cout<<"Error"<<endl;
+        return;
+    }
+
     double aux = ArrConsultas[j].fecha_turno.tm_year * 10000 + ArrConsultas[j].fecha_turno.tm_mon *100 + ArrConsultas[j].fecha_turno.tm_mday;
     if (aux > max)
     {
 
-      array[i].UltimaConsulta.fecha_solicitado.tm_mday = ArrConsultas[j].fecha_solicitado.tm_mday;
-      array[i].UltimaConsulta.fecha_solicitado.tm_mon = ArrConsultas[j].fecha_solicitado.tm_mon;
-      array[i].UltimaConsulta.fecha_solicitado.tm_year = ArrConsultas[j].fecha_solicitado.tm_year;
-      array[i].UltimaConsulta.fecha_turno.tm_mday = ArrConsultas[j].fecha_turno.tm_mday;
-      array[i].UltimaConsulta.fecha_turno.tm_mon = ArrConsultas[j].fecha_turno.tm_mon;
-      array[i].UltimaConsulta.fecha_turno.tm_year = ArrConsultas[j].fecha_turno.tm_year;
-      array[i].UltimaConsulta.presento = ArrConsultas[j].presento;      
-      array[i].UltimaConsulta.medico.nombre = ArrConsultas[j].medico.nombre;
-      array[i].UltimaConsulta.medico.apellido = ArrConsultas[j].medico.apellido;
-      array[i].UltimaConsulta.medico.activo = ArrConsultas[j].medico.activo;
-      array[i].UltimaConsulta.medico.especialidad = ArrConsultas[j].medico.especialidad;
-      array[i].UltimaConsulta.medico.matricula = ArrConsultas[j].medico.matricula;
-      array[i].UltimaConsulta.medico.telefono = ArrConsultas[j].medico.telefono;
-
+      array[i].UltimaConsulta = ArrConsultas[j];
       max = aux;
 
     }
@@ -292,18 +289,23 @@ void copiarPacCons(Paciente*& array, int i, Consultas*& ArrConsultas, int j, dou
 
 }
 
-void copiarPacCont(Paciente *&array, int i, Contacto *&ArrContacto, int j)
+void copiarPacCont(Paciente *&array, int i, Contacto *&ArrContacto, int j) //no es necesario hacer una funcion para esto, pero al hacerla le podemos hacer un unit-test para verificar que funcione
 {
-    array[i].contacto.telefono = ArrContacto[j].telefono;
-    array[i].contacto.celular = ArrContacto[j].celular;
-    array[i].contacto.direccion = ArrContacto[j].direccion;
-    array[i].contacto.mail = ArrContacto[j].mail;
-
+    if(array == nullptr || ArrContacto == nullptr){
+        cout<<"Error"<<endl;
+        return;
+    }
+    array[i].contacto= ArrContacto[j];
     return;
 
 }
 
 void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas, Medico *&ArrMed, int N){
+    
+    if(array == nullptr || ArrContacto == nullptr || ArrConsultas == nullptr || ArrMed == nullptr){
+        cout<<"Error"<<endl;
+        return;
+    }
 
     int i, j;
     for(i=0; i<N; i++){
@@ -325,7 +327,7 @@ void unificar(Paciente *&array, Contacto *&ArrContacto, Consultas *&ArrConsultas
 
     
     for (i=0 ;i<N ;i++){ //recorre pacientes
-        double max = 0.00;
+        double max = 0.00; //se reinicia cuando cambiamos de paciente
         for(j=0; j<N ;j++){ //recorre las otras listas
         
             if(array[i].DNI == ArrContacto[j].DNI){
@@ -399,8 +401,8 @@ bool creoListas(Paciente *&array, int N){
     //imprimimos los headers
     char coma = ',';
     arch << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" <<endl;
-    act << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social"<<endl;
-    nf << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social"<<endl;
+    act  << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" <<endl;
+    nf   << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" <<endl;
 
 
     int j = 0;
