@@ -295,7 +295,7 @@ void copiarPacCont(Paciente *&array, int i, Contacto *&ArrContacto, int j) //no 
         cout<<"Error"<<endl;
         return;
     }
-    array[i].contacto= ArrContacto[j];
+    array[i].contacto = ArrContacto[j];
     return;
 
 }
@@ -434,38 +434,38 @@ bool creoListas(Paciente *&array, int N){
             }
        }
 
-       else
+       else {
             if (array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){ //los que tenemos que contactar
-            int answer = Contactar();
+                int answer = Contactar();
             
-            switch(answer){
-                case 1: //muerto
-                    arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
-                    j++;  
-                    break;
+                switch(answer){
+                    case 1: //muerto
+                        arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
+                        j++;  
+                        break;
 
-                case 2: //not back
-                    arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
-                    j++; 
-                    break;
+                    case 2: //not back
+                        arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
+                        j++; 
+                        break;
 
-                case 3: //quiere volver
-                    act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << endl;
-                    l++;  
-                    break;
+                    case 3: //quiere volver
+                        act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << endl;
+                        l++;  
+                        break;
 
-                case 4: //not found
-                    nf << array[q].DNI << coma << array[q].nombre << coma << array[q].apellido << coma << array[q].sexo << coma << array[q].natalicio << coma << array[q].estado << coma << array[q].id_os << endl;
-                    q++;  
-                    break;
+                    case 4: //not found
+                        nf << array[q].DNI << coma << array[q].nombre << coma << array[q].apellido << coma << array[q].sexo << coma << array[q].natalicio << coma << array[q].estado << coma << array[q].id_os << endl;
+                        q++;  
+                        break;
 
-                default:
-                    cout<<"ERROR al contactar"<<endl;
-                    break;
+                    default:
+                        cout<<"ERROR al contactar"<<endl;
+                        break;
+                }
+
             }
-
         }
-
     }
 
     arch.close();
