@@ -483,7 +483,6 @@ bool creoListas(Paciente *&array, int N){
                 array[l].archivado = "ACTIVO";
                 actualizarObSocial(array, l); //tiene que actualizar la obra social?
                 act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << array[l].archivado << coma << array[l].contacto.telefono << coma << array[l].contacto.celular << coma << array[l].UltimaConsulta.medico.matricula << coma << array[l].UltimaConsulta.medico.nombre << coma << array[l].UltimaConsulta.medico.apellido << coma << array[l].UltimaConsulta.medico.telefono << coma << array[l].UltimaConsulta.medico.especialidad << coma << array[l].UltimaConsulta.medico.activo <<endl;               
-                sacarTurno(array, l); //se programa nueva consulta
                 l++;
             }
 
@@ -504,8 +503,8 @@ bool creoListas(Paciente *&array, int N){
                     case 3: //quiere volver
                         array[l].archivado = "RETORNA";
                         actualizarObSocial(array, l); //tiene que actualizar la obra social?
-
                         act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << array[l].archivado << endl;
+                        sacarTurno(array, l); //se programa nueva consulta
                         l++;
                         break;
 
