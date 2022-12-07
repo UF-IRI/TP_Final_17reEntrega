@@ -396,6 +396,15 @@ void actualizarObSocial(Paciente *&array, int i){ //es con randoms porque como l
     return;
 }
 
+void sacarTurno(Paciente *&array, int i){
+
+    //turno habilitados para todo 2023, no para 2024 porque falta mucho ni para 2022 porque ya termina el año
+    array[i].UltimaConsulta.fecha_turno.tm_mday = rand()% (31 - 1)+ 1;
+    array[i].UltimaConsulta.fecha_turno.tm_mon = rand()% (12 - 1)+ 1;
+    array[i].UltimaConsulta.fecha_turno.tm_year = rand()% (2023 - 2022)+ 2022;
+    
+    return;
+}
 
 bool creoListas(Paciente *&array, int N){
     
@@ -471,9 +480,10 @@ bool creoListas(Paciente *&array, int N){
             }
 
             else if (array[i].estado == "internado" || fecha >= now){ //si esta internado o tiene un turno a futuro
-                array[l].archivado = "RETORNA";
+                array[l].archivado = "ACTIVO";
                 actualizarObSocial(array, l); //tiene que actualizar la obra social?
                 act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << array[l].archivado << coma << array[l].contacto.telefono << coma << array[l].contacto.celular << coma << array[l].UltimaConsulta.medico.matricula << coma << array[l].UltimaConsulta.medico.nombre << coma << array[l].UltimaConsulta.medico.apellido << coma << array[l].UltimaConsulta.medico.telefono << coma << array[l].UltimaConsulta.medico.especialidad << coma << array[l].UltimaConsulta.medico.activo <<endl;               
+                sacarTurno(array, l); //se programa nueva consulta
                 l++;
             }
 
@@ -494,8 +504,9 @@ bool creoListas(Paciente *&array, int N){
                     case 3: //quiere volver
                         array[l].archivado = "RETORNA";
                         actualizarObSocial(array, l); //tiene que actualizar la obra social?
+
                         act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << array[l].archivado << endl;
-                        l++;  
+                        l++;
                         break;
 
                     case 4: //not found
