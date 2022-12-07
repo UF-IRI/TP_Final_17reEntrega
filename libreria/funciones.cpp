@@ -400,9 +400,9 @@ bool creoListas(Paciente *&array, int N){
 
     //imprimimos los headers
     char coma = ',';
-    arch << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" <<endl;
-    act  << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" <<endl;
-    nf   << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" <<endl;
+    arch << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" << "Estado" << endl;
+    act  << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" << "Estado" <<endl;
+    nf   << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" << "Estado" <<endl;
 
 
     int j = 0;
@@ -414,34 +414,36 @@ bool creoListas(Paciente *&array, int N){
     time(&now);
     int diferencia;
 
-    double fecha = 0.00; //no hace falta inicializar
-    fecha = (array[i].UltimaConsulta.fecha_turno.tm_year *365*24*3600) + (array[i].UltimaConsulta.fecha_turno.tm_mon *30*24*3600) + (array[i].UltimaConsulta.fecha_turno.tm_mday *24*3600); //convertimos la fecha a segundos
     
     for(i=0; i<N; i++){
-       diferencia = difftime(now,fecha); //calculo de los años
-       
-       if(array[i].estado == "fallecido" || diferencia >= 315360000){ //si esta muerto o pasaron mas de 10 años (en segundos)
-            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
-                arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
-                j++;  
-            }
-       }
 
-       else if (array[i].estado == "internado" || fecha >= now){ //si esta internado o tiene un turno a futuro
-            if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
-                act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << endl;
-                l++;  
-            }
-       }
-
-       else {
-            if (array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){ //los que tenemos que contactar
-                int answer = Contactar();
+        double fecha; //no hace falta inicializar
+        fecha = (array[i].UltimaConsulta.fecha_turno.tm_year *365*24*3600) + (array[i].UltimaConsulta.fecha_turno.tm_mon *30*24*3600) + (array[i].UltimaConsulta.fecha_turno.tm_mday *24*3600); //convertimos la fecha a segundos
+    
+        diferencia = difftime(now,fecha); //calculo de los años
+        
+        if(array[i].TieneCons == true &&  array[i].TieneCont == true && array[i].TieneMed_enPac == true){
             
+            if(array[i].estado == "fallecido" || diferencia >= 315360000.00){ //si esta muerto o pasaron mas de 10 años (en segundos)
+                array[j].archivado = "ARCHIVADO";
+                arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << array[j].archivado << endl;
+                j++;  
+            
+            }
+
+            else if (array[i].estado == "internado" || fecha >= now){ //si esta internado o tiene un turno a futuro
+                array[l].archivado = "RETORNA";
+                act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << array[l].archivado << endl;
+                l++;    
+            }
+
+            else {
+                int answer = Contactar();
                 switch(answer){
                     case 1: //muerto
-                        arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << endl;
-                        j++;  
+                        array[j].archivado = "ARCHIVADO";
+                        arch << array[j].DNI << coma << array[j].nombre << coma << array[j].apellido << coma << array[j].sexo << coma << array[j].natalicio << coma << array[j].estado << coma << array[j].id_os << array[j].archivado << endl;
+                        j++;    
                         break;
 
                     case 2: //not back
@@ -450,21 +452,23 @@ bool creoListas(Paciente *&array, int N){
                         break;
 
                     case 3: //quiere volver
-                        act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << endl;
+                        array[l].archivado = "RETORNA";
+                        act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << array[l].archivado << endl;
                         l++;  
                         break;
 
                     case 4: //not found
+                        array[q].archivado = "NO_ENCONTRADO";
                         nf << array[q].DNI << coma << array[q].nombre << coma << array[q].apellido << coma << array[q].sexo << coma << array[q].natalicio << coma << array[q].estado << coma << array[q].id_os << endl;
-                        q++;  
+                        q++; 
                         break;
 
                     default:
                         cout<<"ERROR al contactar"<<endl;
                         break;
                 }
-
             }
+        
         }
     }
 
