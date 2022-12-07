@@ -357,6 +357,45 @@ int Contactar(){
     return aux;
 }
 
+void actualizarObSocial(Paciente *&array, int i){ //es con randoms porque como lo llamamos dentro de una funcion no se puede ingresar nada por teclado
+    int cambio;
+    cambio = rand()% (1 - 0)+ 1;
+    int aux;
+   
+    if(cambio == 1){
+        aux = rand()% (7-1) + 1;
+
+        switch(aux){
+            case 1:
+                array[i].id_os = "Medicus";
+                break;
+            case 2:
+                array[i].id_os = "Italiano";
+                break;
+            case 3:
+                array[i].id_os = "Espanyol";
+                break;
+            case 4:
+                array[i].id_os = "Aleman";
+                break;
+            case 5:
+                array[i].id_os = "OSDE";
+                break;
+            case 6:
+                array[i].id_os = "IOSFA";
+                break;
+            case 7:
+                array[i].id_os = "Swiss Medical";
+                break;
+            default:
+                cout<<"ERROR"<<endl;
+                break;
+        }
+    }
+    
+    return;
+}
+
 
 bool creoListas(Paciente *&array, int N){
     
@@ -400,9 +439,9 @@ bool creoListas(Paciente *&array, int N){
 
     //imprimimos los headers
     char coma = ',';
-    arch << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" << "Estado" << endl;
-    act  << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" << "Estado" <<endl;
-    nf   << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado" << coma << "Obra_Social" << "Estado" <<endl;
+    arch << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado - Paciente" << coma << "Obra_Social" << coma << "Estado - Archivo" << endl;
+    act  << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado - Paciente" << coma << "Obra_Social" << coma << "Estado - Archivo" << coma << "Contacto - Telefono" << coma << "Contacto - Celular" << coma << "Medico - Matricula" << coma << "Medico - Nombre" << coma << "Medico - Apellido" << coma << "Medico - Telefono" << coma << "Medico - Especialidad" << coma << "Medico - Activo?" <<endl;
+    nf   << "DNI" << coma << "Nombre" << coma << "Apellido" << coma << "Sexo" << coma << "Natalicio" << coma << "Estado - Paciente" << coma << "Obra_Social" << coma << "Estado - Archivo" <<endl;
 
 
     int j = 0;
@@ -433,8 +472,9 @@ bool creoListas(Paciente *&array, int N){
 
             else if (array[i].estado == "internado" || fecha >= now){ //si esta internado o tiene un turno a futuro
                 array[l].archivado = "RETORNA";
-                act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << array[l].archivado << endl;
-                l++;    
+                actualizarObSocial(array, l); //tiene que actualizar la obra social?
+                act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << array[l].archivado << coma << array[l].contacto.telefono << coma << array[l].contacto.celular << coma << array[l].UltimaConsulta.medico.matricula << coma << array[l].UltimaConsulta.medico.nombre << coma << array[l].UltimaConsulta.medico.apellido << coma << array[l].UltimaConsulta.medico.telefono << coma << array[l].UltimaConsulta.medico.especialidad << coma << array[l].UltimaConsulta.medico.activo <<endl;               
+                l++;
             }
 
             else {
@@ -453,6 +493,7 @@ bool creoListas(Paciente *&array, int N){
 
                     case 3: //quiere volver
                         array[l].archivado = "RETORNA";
+                        actualizarObSocial(array, l); //tiene que actualizar la obra social?
                         act << array[l].DNI << coma << array[l].nombre << coma << array[l].apellido << coma << array[l].sexo << coma << array[l].natalicio << coma << array[l].estado << coma << array[l].id_os << array[l].archivado << endl;
                         l++;  
                         break;

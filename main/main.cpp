@@ -4,12 +4,11 @@
 #include <cstring>
 #include <fstream>
 #include <ctime>
+#include <cmath>
 #include "structs.h"
 #include "funciones.h"
 
 using namespace std;
-
-//borrar mem flags
 
 int main() {
 
